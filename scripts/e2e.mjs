@@ -101,6 +101,10 @@ try {
     .locator('[data-testid="repos-file-tree-container"] li.PRIVATE_TreeView-item:not([aria-expanded]) svg.octicon-file')
     .evaluateAll((els) => els.every((el) => getComputedStyle(el).display === 'none'));
   check('sidebar tree: generic file octicon hidden', octiconHidden);
+  const folderVisualVisible = await page
+    .locator('[data-testid="repos-file-tree-container"] li.PRIVATE_TreeView-item[aria-expanded] .PRIVATE_TreeView-item-visual')
+    .evaluateAll((els) => els.every((el) => getComputedStyle(el).display !== 'none'));
+  check('sidebar tree: folder visuals visible', folderVisualVisible);
   await dumpDom('sidebar tree item', '[data-testid="repos-file-tree-container"] li.PRIVATE_TreeView-item', 1);
 
   // 4. File finder (opened via ?search=1; uses the same TreeView component)

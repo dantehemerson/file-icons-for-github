@@ -13,11 +13,11 @@ function treeFileItem(name: string): HTMLElement {
   return item;
 }
 
-function treeDirectoryItem(name: string): HTMLElement {
+function treeDirectoryItem(name: string, expanded = false): HTMLElement {
   const item = document.createElement('li');
   item.className = 'PRIVATE_TreeView-item';
   item.innerHTML = `
-    <div class="PRIVATE_TreeView-item-content" aria-expanded="false">
+    <div class="PRIVATE_TreeView-item-content" aria-expanded="${expanded}">
       <div class="PRIVATE_TreeView-item-toggle"><svg class="octicon octicon-chevron-right"></svg></div>
       <div class="PRIVATE_TreeView-item-content-text"><span class="PRIVATE_TreeView-item-name">${name}</span></div>
     </div>`;
@@ -51,5 +51,18 @@ describe('renderTreeItem', () => {
     renderTreeItem(item);
     renderTreeItem(item);
     expect(item.querySelectorAll('.seti-icon')).toHaveLength(1);
+  });
+
+  it('does not decorate a folder containing decorated child files', () => {
+    const folder = treeDirectoryItem('src', true);
+    const child = treeFileItem('index.ts');
+    folder.querySelector('.PRIVATE_TreeView-item-content')!.append(child);
+    document.body.append(folder);
+
+    renderTreeItem(child);
+    renderTreeItem(folder);
+
+    expect(child.querySelector('.seti-icon')).not.toBeNull();
+    expect(folder.querySelector('.PRIVATE_TreeView-item-content-text')!.querySelector('.seti-icon')).toBeNull();
   });
 });

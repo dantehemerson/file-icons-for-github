@@ -24,8 +24,10 @@ div.react-directory-filename-column:has(.seti-icon) svg.octicon-file {
 }
 
 /* Repository file tree / file finder: hide the generic file octicon in the
- * TreeView visual slot of decorated (file) items. */
-li.PRIVATE_TreeView-item:has(.seti-icon) .PRIVATE_TreeView-item-visual svg {
+ * TreeView visual slot of decorated (file) items.  The :has() selector is
+ * scoped to the item's own content-text so that folder <li> elements (which
+ * contain descendant file icons when expanded) are not matched. */
+li.PRIVATE_TreeView-item:has(> .PRIVATE_TreeView-item-content > .PRIVATE_TreeView-item-content-text > .seti-icon) .PRIVATE_TreeView-item-visual svg {
   display: none;
 }
 
