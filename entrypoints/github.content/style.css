@@ -1,0 +1,35 @@
+/* Base icon element injected before file names. */
+.seti-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  font-family: 'Seti' !important;
+  font-size: 16px !important;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 16px;
+  text-align: center;
+  vertical-align: -2px;
+  margin-right: 2px;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Repository file table: hide GitHub's generic file octicon in cells we
+ * decorated. Directories keep their folder icon. */
+div.react-directory-filename-column:has(.seti-icon) svg.octicon-file {
+  display: none;
+}
+
+/* Repository file tree / file finder: hide the generic file octicon in the
+ * TreeView visual slot of decorated (file) items. */
+li.PRIVATE_TreeView-item:has(.seti-icon) .PRIVATE_TreeView-item-visual svg {
+  display: none;
+}
+
+/* Gist file headers: hide the default code-square octicon once decorated. */
+.file:has(.seti-icon) .octicon-code-square {
+  display: none;
+}
