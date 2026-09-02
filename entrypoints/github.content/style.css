@@ -1,16 +1,28 @@
+/* ── Configurable icon size ── */
+.seti-icon {
+  --seti-icon-size: 20px;
+}
+
+/* Vertically align icon with filename inside the text slot. */
+.PRIVATE_TreeView-item-content-text:has(> .seti-icon) {
+  display: inline-flex !important;
+  align-items: center;
+}
+
 /* Base icon element injected before file names. */
 .seti-icon {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--seti-icon-size);
+  height: var(--seti-icon-size);
   flex: none;
   font-family: 'Seti' !important;
-  font-size: 16px !important;
+  font-size: var(--seti-icon-size) !important;
   font-style: normal;
   font-weight: normal;
-  line-height: 16px;
+  line-height: 1;
   text-align: center;
-  vertical-align: -2px;
   margin-right: 2px;
   -webkit-font-smoothing: antialiased;
   user-select: none;
