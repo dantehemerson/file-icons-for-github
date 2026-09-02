@@ -69,3 +69,10 @@
 [role="listbox"] [role="option"][id^="file-result-"] .seti-icon {
   margin-right: var(--base-size-8, 8px);
 }
+
+/* Diff file headers: when the file-name container is RTL the Seti icon
+ * is appended, which places it against the filename <a>. Add 3px of
+ * left padding to that anchor so the icon has breathing room. */
+[class*="diff-file-header"] [class*="file-name"]:has(> .seti-icon:last-child) > a {
+  padding-left: 3px;
+}

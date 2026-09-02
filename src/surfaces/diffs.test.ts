@@ -3,11 +3,11 @@ import { defs } from '../icons/seti-data';
 import { resolveIcon } from '../icons/resolve-icon';
 import { renderDiffHeader } from './diffs';
 
-function modernHeader(path: string): HTMLElement {
+function modernHeader(path: string, direction: 'ltr' | 'rtl' = 'ltr'): HTMLElement {
   const header = document.createElement('div');
   header.className = 'DiffFileHeader-module__diff-file-header__UuNN4';
   header.innerHTML = `<div class="d-flex">
-    <h3 class="DiffFileHeader-module__file-name__VVXpg">${path}</h3>
+    <h3 class="DiffFileHeader-module__file-name__VVXpg" style="direction: ${direction};"><code>${path}</code></h3>
   </div>`;
   document.body.append(header);
   return header;
@@ -48,7 +48,7 @@ describe('renderDiffHeader', () => {
     const header = document.createElement('div');
     header.className = 'DiffFileHeader-module__diff-file-header__UuNN4';
     header.innerHTML = `<div class="d-flex">
-      <h3 class="DiffFileHeader-module__file-name__VVXpg"><code>&lrm;src/R.hpp&lrm;</code></h3>
+      <h3 class="DiffFileHeader-module__file-name__VVXpg" style="direction: ltr;"><code>&lrm;src/R.hpp&lrm;</code></h3>
     </div>`;
     document.body.append(header);
 
@@ -57,5 +57,25 @@ describe('renderDiffHeader', () => {
     const icon = header.querySelector<HTMLElement>('h3 .seti-icon');
     expect(icon).not.toBeNull();
     expect(icon!.textContent).toBe(defs[resolveIcon('R.hpp', 'file')!]!.c);
+  });
+
+  it('appends the icon when the file-name container is RTL', () => {
+    const header = modernHeader('src/ActorManager.cpp', 'rtl');
+    renderDiffHeader(header);
+
+    const h3 = header.querySelector('h3')!;
+    const icon = h3.querySelector<HTMLElement>('.seti-icon');
+    expect(icon).not.toBeNull();
+    expect(icon!.previousElementSibling?.tagName).toBe('CODE');
+  });
+
+  it('prepends the icon when the file-name container is LTR', () => {
+    const header = modernHeader('src/ActorManager.cpp', 'ltr');
+    renderDiffHeader(header);
+
+    const h3 = header.querySelector('h3')!;
+    const icon = h3.querySelector<HTMLElement>('.seti-icon');
+    expect(icon).not.toBeNull();
+    expect(h3.firstElementChild).toBe(icon);
   });
 });

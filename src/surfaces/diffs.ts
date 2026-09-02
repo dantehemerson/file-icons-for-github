@@ -37,7 +37,12 @@ export function renderDiffHeader(header: Element): void {
     return;
   }
 
-  nameEl.prepend(createIcon(info));
+  const icon = createIcon(info);
+  if (isRtl(nameEl)) {
+    nameEl.append(icon);
+  } else {
+    nameEl.prepend(icon);
+  }
 }
 
 export function initDiffs(): void {
@@ -50,4 +55,8 @@ function lastPathSegment(path: string): string {
 
 function stripInvisibles(text: string): string {
   return text.replaceAll(INVISIBLE_CODE_POINTS, '');
+}
+
+function isRtl(element: Element): boolean {
+  return getComputedStyle(element).direction === 'rtl';
 }
