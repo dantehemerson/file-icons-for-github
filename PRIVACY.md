@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Seti Icons for GitHub** does not collect, store, or transmit any personal
+**File Icons for GitHub** does not collect, store, or transmit any personal
 data. This extension:
 
 - Runs only on `github.com` and `gist.github.com`.

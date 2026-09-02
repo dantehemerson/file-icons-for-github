@@ -3,7 +3,7 @@ import { defineConfig } from 'wxt';
 export default defineConfig({
   manifestVersion: 3,
   manifest: ({ browser }) => ({
-    name: 'Seti Icons for GitHub',
+    name: 'File Icons for GitHub',
     description:
       'Show VS Code Seti file icons on GitHub file listings, trees, the file finder, code search, gists, and diffs.',
     // The extension only reads/writes the DOM of GitHub pages. It makes no
@@ -15,7 +15,7 @@ export default defineConfig({
       ? {
           browser_specific_settings: {
             gecko: {
-              id: 'seti-icons-for-github@derevenchenko.com',
+              id: 'dantecalderon.dev@gmail.com',
               data_collection_permissions: {
                 required: ['none'],
               },

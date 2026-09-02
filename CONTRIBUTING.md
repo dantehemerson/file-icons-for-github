@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for helping keep Seti Icons for GitHub working. The main maintenance
+Thanks for helping keep File Icons for GitHub working. The main maintenance
 burden is GitHub's ever-changing DOM.
 
 ## How to contribute

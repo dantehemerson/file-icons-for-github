@@ -1,4 +1,4 @@
-# Seti Icons for GitHub
+# File Icons for GitHub
 
 Shows [VS Code Seti](https://github.com/jesseweed/seti-ui) file-type icons on GitHub:
 
