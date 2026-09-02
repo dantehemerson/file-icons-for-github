@@ -109,10 +109,13 @@ describe('renderTreeItem', () => {
     const item = treeFileItem('action-pr-link.tsx');
     renderTreeItem(item);
 
-    const textSlot = item.querySelector('.PRIVATE_TreeView-item-content-text')!;
-    const icon = textSlot.querySelector<HTMLElement>('.seti-icon');
+    const visualSlot = item.querySelector('.PRIVATE_TreeView-item-visual')!;
+    const icon = visualSlot.querySelector<HTMLElement>('.seti-icon');
     expect(icon).not.toBeNull();
     expect(icon!.getAttribute('aria-hidden')).toBe('true');
+    // The Seti icon lives in the visual slot, not the filename slot, so
+    // Primer's native spacing between the icon and the filename applies.
+    expect(item.querySelector('.PRIVATE_TreeView-item-content-text')!.querySelector('.seti-icon')).toBeNull();
   });
 
   it('skips directory items', () => {
@@ -154,8 +157,8 @@ describe('renderTreeItem', () => {
     const item = treeFileItemWithWrapper('utils.ts');
     renderTreeItem(item);
 
-    const textSlot = item.querySelector('.PRIVATE_TreeView-item-content-text')!;
-    const icon = textSlot.querySelector<HTMLElement>('.seti-icon');
+    const visualSlot = item.querySelector('.PRIVATE_TreeView-item-visual')!;
+    const icon = visualSlot.querySelector<HTMLElement>('.seti-icon');
     expect(icon).not.toBeNull();
 
     const originalIcon = item.querySelector<SVGElement>('.PRIVATE_TreeView-item-visual svg');

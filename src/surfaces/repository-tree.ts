@@ -30,7 +30,8 @@ export function renderTreeItem(item: Element): void {
   if (item.hasAttribute('aria-expanded') || content.hasAttribute('aria-expanded')) {
     return;
   }
-  const visual = item.querySelector<SVGElement>('.PRIVATE_TreeView-item-visual svg');
+  const visualSlot = content.querySelector<HTMLElement>('.PRIVATE_TreeView-item-visual');
+  const visual = visualSlot?.querySelector<SVGElement>('svg') ?? null;
   if (visual) {
     const isChevron = visual.classList.contains('octicon-chevron-down')
       || visual.classList.contains('octicon-chevron-right')
@@ -47,7 +48,7 @@ export function renderTreeItem(item: Element): void {
     return;
   }
 
-  if (textSlot.querySelector('.seti-icon')) {
+  if (textSlot.querySelector('.seti-icon') || visualSlot?.querySelector('.seti-icon')) {
     return;
   }
 
@@ -58,7 +59,11 @@ export function renderTreeItem(item: Element): void {
     return;
   }
 
-  textSlot.prepend(createIcon(info));
+  if (visualSlot) {
+    visualSlot.append(createIcon(info));
+  } else {
+    textSlot.prepend(createIcon(info));
+  }
 
   if (visual instanceof SVGElement) {
     visual.classList.add('seti-original-icon');

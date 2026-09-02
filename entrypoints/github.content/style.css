@@ -1,23 +1,34 @@
-/* Vertically align icon with filename inside the text slot. */
-.PRIVATE_TreeView-item-content-text:has(> .seti-icon) {
-  display: inline-flex !important;
-  align-items: center;
-}
-
 /* Base icon element injected before file names.
  * The Seti font glyphs have significant internal side bearings (padding)
- * in the em-square, so scaling the glyph is required to make it visually
- * fill the full 14px box that matches GitHub's native folder icon. The
- * scale transform does not affect layout, and overflow: hidden clips any
- * bleed so the icon stays a fixed 14px × 14px footprint with 2px margin. */
+ * in the em-square, so the glyph is scaled via a ::before pseudo-element
+ * to fill the 14px box that matches GitHub's native folder icon. The
+ * outer element stays a fixed 14px × 14px layout box. overflow: hidden
+ * clips any visual bleed from the scaled glyph. margin-right provides
+ * the spacing in contexts where the icon sits next to the filename
+ * (gists, diffs, search, file table). */
 .seti-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
   width: 14px;
   height: 14px;
   flex: none;
   overflow: hidden;
+  font-size: 0;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 0;
+  text-align: center;
+  vertical-align: middle;
+  margin-right: 2px;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  pointer-events: none;
+}
+
+.seti-icon::before {
+  display: inline-block;
+  content: attr(data-seti-glyph);
+  width: 14px;
+  height: 14px;
   font-family: 'Seti' !important;
   font-size: 14px !important;
   font-style: normal;
@@ -26,10 +37,14 @@
   text-align: center;
   transform: scale(1.6);
   transform-origin: center center;
-  margin-right: 2px;
   -webkit-font-smoothing: antialiased;
-  user-select: none;
-  pointer-events: none;
+}
+
+/* Inside the TreeView visual slot, Primer already provides the spacing
+ * between the icon column and the filename column, so the icon's own
+ * margin-right must be cleared to avoid doubling the gap. */
+.PRIVATE_TreeView-item-visual .seti-icon {
+  margin-right: 0;
 }
 
 /* Repository file table: hide GitHub's generic file octicon in cells we
