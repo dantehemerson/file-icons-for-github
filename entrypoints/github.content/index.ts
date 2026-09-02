@@ -4,6 +4,7 @@ import { initThemeSync } from '../../src/render';
 import { initDiffs } from '../../src/surfaces/diffs';
 import { initFileFinder } from '../../src/surfaces/file-finder';
 import { initGist } from '../../src/surfaces/gist';
+import { initQuickSearch } from '../../src/surfaces/quick-search';
 import { initRepositoryTable } from '../../src/surfaces/repository-table';
 import { initRepositoryTree } from '../../src/surfaces/repository-tree';
 import { initSearchResults } from '../../src/surfaces/search-results';
@@ -19,6 +20,7 @@ export default defineContentScript({
     initRepositoryTable();
     initRepositoryTree();
     initFileFinder();
+    initQuickSearch();
     initSearchResults();
     initGist();
     initDiffs();

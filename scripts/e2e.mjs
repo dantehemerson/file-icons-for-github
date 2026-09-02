@@ -151,6 +151,44 @@ try {
   check('file finder: native file icons hidden', finderOriginalsHidden);
   await dumpDom('file finder option', '#file-results-list [role="option"][id^="file-result-"]', 1);
 
+  // 4b. Quick search dialog ("Type / to search") opened from the header.
+  await page.goto('https://github.com/refined-github/refined-github', { waitUntil: 'domcontentloaded' });
+  const quickSearchTrigger = page.locator('[data-target="qbsearch-input.inputButton"]');
+  await quickSearchTrigger.waitFor({ state: 'visible', timeout: 15_000 });
+  await quickSearchTrigger.click();
+  const quickSearchInput = page.locator('input[aria-label="Search or jump to..."]');
+  await quickSearchInput.waitFor({ state: 'visible', timeout: 15_000 });
+  await quickSearchInput.fill('README');
+  await page.waitForSelector('a[data-testid="quick-search-suggestion"][href*="/blob/"]', {
+    state: 'attached',
+    timeout: 15_000,
+  });
+  await page.waitForSelector('a[data-testid="quick-search-suggestion"] svg.octicon-file-code.seti-original-icon', {
+    state: 'attached',
+    timeout: 15_000,
+  });
+  const quickFileOptions = await page
+    .locator('a[data-testid="quick-search-suggestion"][href*="/blob/"]')
+    .count();
+  const quickIcons = await page
+    .locator('a[data-testid="quick-search-suggestion"][href*="/blob/"] .seti-icon')
+    .count();
+  if (quickFileOptions === 0) {
+    fail('quick search: no file suggestions found', 'selector mismatch');
+  } else {
+    check(
+      'quick search: file suggestions decorated',
+      quickIcons >= quickFileOptions,
+      `icons=${quickIcons} files=${quickFileOptions}`,
+    );
+  }
+  const quickOriginalsHidden = await page
+    .locator('a[data-testid="quick-search-suggestion"][href*="/blob/"] svg.seti-original-icon')
+    .evaluateAll((els) => els.every((el) => getComputedStyle(el).display === 'none'));
+  check('quick search: native file-code icons hidden', quickOriginalsHidden);
+  await dumpDom('quick search suggestion', 'a[data-testid="quick-search-suggestion"]', 1);
+  await page.keyboard.press('Escape');
+
 // 5. Code search results (requires a signed-in session; skipped otherwise)
   await page.goto('https://github.com/search?q=repo%3Arefined-github%2Frefined-github&type=code', {
     waitUntil: 'domcontentloaded',
