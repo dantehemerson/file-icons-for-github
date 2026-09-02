@@ -1,63 +1,82 @@
-# File Icons for GitHub
+<h1 align="center">File Icons for GitHub</h1>
 
-Shows [VS Code Seti](https://github.com/jesseweed/seti-ui) file-type icons on GitHub:
+<p align="center">
+  Bring the iconic VS Code <strong>Seti</strong> file icons to every GitHub page you use.
+</p>
 
-- Repository file listings and folder pages
-- The repository file tree (blob/tree sidebar)
-- The "Go to file" finder
-- Code search results
-- Gists
-- Pull request / commit / compare diff headers
+<p align="center">
+  <em>Pretty pixels, zero network traffic, zero tracking.</em>
+</p>
 
-Icons are rendered from a single **37 KB font embedded in the extension**, so
-there are no per-file image requests and no runtime network calls.
+<br/>
 
-This is a clean-room successor to the abandoned
-[`dderevjanik/github-vscode-icons`](https://github.com/dderevjanik/github-vscode-icons)
-extension: a modern Manifest V3 build, a fraction of the size, no background
-service worker, and a minimal permission surface.
+<p align="center">
+  <!-- Replace this placeholder with a real screenshot when ready -->
+  <img src="docs/screenshot.png" alt="File Icons for GitHub screenshot" width="860" />
+</p>
 
-## Install (development)
+## ✨ Features
+
+- 🔒 **Private by design** — runs entirely in your browser; nothing is collected, stored, or transmitted.
+- 🛡️ **No permissions, no network** — zero `host_permissions`, no background service worker, no remote code.
+- ⚡ **Lightweight & fast** — a single ~37 KB icon font embedded in the extension, no per-file image requests.
+- 🎨 **True to VS Code** — the exact Seti icon set you already know from the editor, including theme-aware colors.
+- 🧭 **Covers GitHub everywhere** — file listings, sidebar tree, file finder, code search, gists, and PR / commit diffs.
+- 🌓 **Light & dark themes** — icons automatically recolor to match GitHub's light and dark modes.
+- ♿ **Accessibility-friendly** — every icon is decorative (`aria-hidden`) and never alters the underlying file link or its accessible name.
+- 🧱 **Manifest V3, modern build** — clean-room successor to `dderevjanik/github-vscode-icons` on top of [WXT](https://wxt.dev) + [Vite](https://vitejs.dev).
+
+## 📦 Install
+
+<p align="center">
+  <a href="#" aria-label="Chrome Web Store">
+    <img src="https://img.shields.io/badge/Chrome-Available_on_the_Chrome_Web_Store-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Available on the Chrome Web Store" />
+  </a>
+  &nbsp;&nbsp;
+  <a href="#" aria-label="Firefox Add-ons">
+    <img src="https://img.shields.io/badge/Firefox-Available_on_Firefox_Add--ons-FF7139?style=for-the-badge&logo=firefox&logoColor=white" alt="Available on Firefox Add-ons" />
+  </a>
+</p>
+
+Want to try it right now? Load the unpacked build you produce locally — see [Development](#-development) below.
+
+## 🔒 Privacy
+
+The extension requests **no API permissions**, declares **no `host_permissions`**, and makes **no network requests**. All icons are rendered from a font that is embedded as a base64 data URI inside the package.
+
+It only runs on `github.com` and `gist.github.com` (via the content-script `matches` declaration, which is the minimum needed to render icons next to file names).
+
+The full statement lives in [PRIVACY.md](PRIVACY.md).
+
+## 🛠️ Development
+
+### Requirements
+
+- [Node.js](https://nodejs.org) (see [`.node-version`](.node-version))
+- npm (bundled with Node.js)
+
+### Install dependencies
 
 ```sh
 npm install
-npm run build            # Chromium extension -> .output/chrome-mv3
-npm run build:firefox    # Firefox extension   -> .output/firefox-mv3
 ```
 
-- **Chromium / Edge / Brave:** `chrome://extensions` → *Developer mode* →
-  *Load unpacked* → select `.output/chrome-mv3`.
-- **Firefox:** `about:debugging#/runtime/this-firefox` → *Load Temporary Add-on*
-  → select `.output/firefox-mv3/manifest.json`.
-
-Store-ready archives:
+### Build
 
 ```sh
-npm run zip              # .output/chrome-mv3.zip
-npm run zip:firefox      # .output/firefox-mv3.zip
+npm run build            # Chromium extension → .output/chrome-mv3
+npm run build:firefox    # Firefox extension  → .output/firefox-mv3
+
+npm run zip              # .output/chrome-mv3.zip  (store-ready archive)
+npm run zip:firefox      # .output/firefox-mv3.zip (store-ready archive)
 ```
 
-## Permissions & privacy
+### Load the extension locally
 
-The extension requests **no API permissions** and makes **no network
-requests**:
+- **Chromium / Edge / Brave:** `chrome://extensions` → enable *Developer mode* → *Load unpacked* → select `.output/chrome-mv3`.
+- **Firefox:** `about:debugging#/runtime/this-firefox` → *Load Temporary Add-on* → select `.output/firefox-mv3/manifest.json`.
 
-- It only runs on `github.com` and `gist.github.com` (content-script
-  `matches`; no `host_permissions` are declared).
-- It reads the page DOM to find file names and inserts a decorative,
-  hidden-from-assistive-technology icon element.
-- It does not collect, store, or transmit any data. The Seti font is embedded
-  as a base64 data URI in the extension package; icons are resolved entirely
-  locally with no runtime fetch.
-- No background service worker exists.
-
-The only browser warning you will see is that the extension can "read and
-change your data on github.com and gist.github.com" — unavoidable for an
-extension that visually modifies those pages.
-
-See [PRIVACY.md](PRIVACY.md) for the full statement.
-
-## Development
+### Scripts
 
 ```sh
 npm run dev              # watch + hot reload (Chrome)
@@ -65,14 +84,12 @@ npm run dev:firefox      # watch + hot reload (Firefox)
 npm test                 # unit tests (resolver + surface renderers)
 npm run test:e2e         # real-browser checks against live GitHub pages
 npm run compile          # TypeScript type check
+npm run test:all         # compile + unit tests + build + E2E
 ```
 
-The E2E suite loads the built extension into Chromium and verifies icons appear
-on the repo table, sidebar tree, file finder, gists, and commit diffs, plus
-light/dark theme recolor. Code-search and PR-files checks are skipped when the
-session is signed out (GitHub does not render those for anonymous users).
+> The E2E suite needs the Playwright Chromium that matches the pinned Playwright version. Code-search and PR-files checks are skipped automatically when the GitHub session is anonymous.
 
-### Architecture
+### Project layout
 
 ```
 entrypoints/github.content/   content script entry (injects the font-face + CSS)
@@ -84,32 +101,21 @@ scripts/update-seti-icons.mjs regenerates src/icons/* from upstream VS Code
 scripts/e2e.mjs               browser E2E
 ```
 
-Each surface adapter owns its selectors and filename extraction. When GitHub
-changes markup, only the affected adapter needs updating.
+Each surface adapter owns its selectors and filename extraction. When GitHub changes markup, only the affected adapter needs updating. See [AGENTS.md](AGENTS.md) for the architectural notes and contribution conventions.
 
-### Updating the icon set
+## 🤝 Contributing
 
-Icons come from VS Code's built-in `theme-seti` extension. Regenerate the
-bundled data and font from a pinned upstream commit:
+Bug reports and pull requests are welcome. For non-trivial changes, please open an issue first so we can agree on the direction.
 
-```sh
-npm run update:seti            # uses the pinned commit in scripts/update-seti-icons.mjs
-npm run update:seti <sha>      # or re-pin to a specific commit
-```
+- Read [CONTRIBUTING.md](CONTRIBUTING.md) for contribution conventions.
+- Read [AGENTS.md](AGENTS.md) for architecture, adapter rules, and regeneration steps.
 
-The script downloads the font, association JSON, and license notices, verifies
-them, and writes compact runtime data to `src/icons/seti-data.ts` and
-`src/icons/seti-font.ts` (the font is embedded as base64). These generated
-files are committed so builds are reproducible offline.
+## 🙏 Credits
 
-## License & credits
+- Icons and associations: [Seti UI](https://github.com/jesseweed/seti-ui) by Jesse Weed, distributed via Microsoft's [vscode-theme-seti](https://github.com/microsoft/vscode/tree/main/extensions/theme-seti) (MIT / Seti UI license). Third-party notices live in [`assets/third-party/`](assets/third-party/).
+- Build tooling: [WXT](https://wxt.dev), [Vite](https://vitejs.dev), [Vitest](https://vitest.dev), [Playwright](https://playwright.dev).
+- Inspired by the now-abandoned [`dderevjanik/github-vscode-icons`](https://github.com/dderevjanik/github-vscode-icons).
 
-MIT. See [LICENSE](LICENSE).
+## 📄 License
 
-- Icons and associations: [Seti UI](https://github.com/jesseweed/seti-ui) by
-  Jesse Weed, distributed via Microsoft's
-  [vscode-theme-seti](https://github.com/microsoft/vscode/tree/main/extensions/theme-seti)
-  (MIT / Seti UI license). Third-party notices are in
-  [`assets/third-party/`](assets/third-party/).
-- Build tooling: [WXT](https://wxt.dev), [Vite](https://vitejs.dev),
-  [Vitest](https://vitest.dev), [Playwright](https://playwright.dev).
+Released under the [MIT License](LICENSE).
