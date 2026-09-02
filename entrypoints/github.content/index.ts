@@ -2,6 +2,7 @@ import { setiFont } from '../../src/icons/seti-font';
 import { disconnectObserver } from '../../src/observe';
 import { initThemeSync } from '../../src/render';
 import { initDiffs } from '../../src/surfaces/diffs';
+import { initFileFinder } from '../../src/surfaces/file-finder';
 import { initGist } from '../../src/surfaces/gist';
 import { initRepositoryTable } from '../../src/surfaces/repository-table';
 import { initRepositoryTree } from '../../src/surfaces/repository-tree';
@@ -17,6 +18,7 @@ export default defineContentScript({
 
     initRepositoryTable();
     initRepositoryTree();
+    initFileFinder();
     initSearchResults();
     initGist();
     initDiffs();

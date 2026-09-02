@@ -62,3 +62,10 @@
 .file:has(.seti-icon) .octicon-code-square {
   display: none;
 }
+
+/* "Go to file" finder: GitHub uses mr-2 (8px) on the native file octicon,
+ * so the Seti icon needs to inherit the same gap to keep the filename
+ * spacing consistent after decoration. */
+[role="listbox"] [role="option"][id^="file-result-"] .seti-icon {
+  margin-right: var(--base-size-8, 8px);
+}

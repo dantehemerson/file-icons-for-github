@@ -115,20 +115,41 @@ try {
   check('sidebar tree: folder visuals visible', folderVisualVisible);
   await dumpDom('sidebar tree item', '[data-testid="repos-file-tree-container"] li.PRIVATE_TreeView-item', 1);
 
-  // 4. File finder (opened via ?search=1; uses the same TreeView component)
+  // 4. File finder (overlay dialog with role="option" results).
   await page.goto('https://github.com/refined-github/refined-github/tree/main?search=1', {
     waitUntil: 'domcontentloaded',
   });
-  await page.waitForSelector('.PRIVATE_TreeView-item', { state: 'attached', timeout: 15_000 });
-  await page.waitForSelector('.PRIVATE_TreeView-item .seti-icon', { state: 'attached', timeout: 10_000 });
-  const finderItems = await page.locator('.PRIVATE_TreeView-item:not([aria-expanded])').count();
-  const finderIcons = await page.locator('.PRIVATE_TreeView-item .seti-icon').count();
-  if (finderItems === 0) {
-    fail('file finder: no items found', 'selector mismatch');
+  const finderInput = page.locator('input[aria-label="Go to file"]');
+  await finderInput.waitFor({ state: 'visible', timeout: 15_000 });
+  await finderInput.fill('README');
+  await page.waitForSelector('#file-results-list [role="option"][id^="file-result-"]', {
+    state: 'attached',
+    timeout: 10_000,
+  });
+  await page.waitForSelector('#file-results-list [role="option"] .seti-icon', {
+    state: 'attached',
+    timeout: 10_000,
+  });
+  const finderFileOptions = await page
+    .locator('#file-results-list [role="option"][id^="file-result-"]:has(svg[aria-label="File"])')
+    .count();
+  const finderIcons = await page
+    .locator('#file-results-list [role="option"][id^="file-result-"] .seti-icon')
+    .count();
+  if (finderFileOptions === 0) {
+    fail('file finder: no file options found', 'selector mismatch');
   } else {
-    check('file finder: results decorated', finderIcons >= finderItems, `icons=${finderIcons} files=${finderItems}`);
+    check(
+      'file finder: file options decorated',
+      finderIcons >= finderFileOptions,
+      `icons=${finderIcons} files=${finderFileOptions}`,
+    );
   }
-  await dumpDom('file finder item', '.PRIVATE_TreeView-item-content', 1);
+  const finderOriginalsHidden = await page
+    .locator('#file-results-list svg.seti-original-icon')
+    .evaluateAll((els) => els.every((el) => getComputedStyle(el).display === 'none'));
+  check('file finder: native file icons hidden', finderOriginalsHidden);
+  await dumpDom('file finder option', '#file-results-list [role="option"][id^="file-result-"]', 1);
 
 // 5. Code search results (requires a signed-in session; skipped otherwise)
   await page.goto('https://github.com/search?q=repo%3Arefined-github%2Frefined-github&type=code', {

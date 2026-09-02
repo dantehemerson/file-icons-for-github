@@ -5,8 +5,9 @@ import { resolveIcon } from '../icons/resolve-icon';
 const SELECTOR = '.PRIVATE_TreeView-item';
 
 /**
- * Repository file tree (blob/tree sidebar), the "Go to file" finder, and the
- * PR changed-files tree all render with GitHub's TreeView component.
+ * Repository file tree (blob/tree sidebar) and the PR changed-files tree
+ * render with GitHub's TreeView component. The "Go to file" finder uses a
+ * different overlay and is handled by `file-finder.ts`.
  *
  * Directories keep GitHub's chevron/folder visuals; only leaf files are
  * decorated.
