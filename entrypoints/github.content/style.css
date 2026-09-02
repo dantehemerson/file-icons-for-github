@@ -40,10 +40,15 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Inside the TreeView visual slot, Primer already provides the spacing
- * between the icon column and the filename column, so the icon's own
- * margin-right must be cleared to avoid doubling the gap. */
+/* Inside the TreeView visual slot, Primer supplies the spacing between
+ * the icon column and the filename column, so the Seti icon must occupy
+ * the full 16px footprint that GitHub's native SVG used. Otherwise
+ * hiding the native SVG would shift the filename 2px to the left after
+ * decoration. The icon's own margin-right is cleared because Primer
+ * already provides the gap. */
 .PRIVATE_TreeView-item-visual .seti-icon {
+  width: 16px;
+  height: 16px;
   margin-right: 0;
 }
 
