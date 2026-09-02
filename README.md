@@ -42,11 +42,13 @@ npm run zip:firefox      # .output/firefox-mv3.zip
 The extension requests **no API permissions** and makes **no network
 requests**:
 
-- It only runs on `github.com` and `gist.github.com` (`host_permissions`).
-- It reads the page DOM to find file names and inserts a decorative, hidden-from
-  assistive-technology icon element.
+- It only runs on `github.com` and `gist.github.com` (content-script
+  `matches`; no `host_permissions` are declared).
+- It reads the page DOM to find file names and inserts a decorative,
+  hidden-from-assistive-technology icon element.
 - It does not collect, store, or transmit any data. The Seti font is embedded
-  in the extension package; icons are resolved entirely locally.
+  as a base64 data URI in the extension package; icons are resolved entirely
+  locally with no runtime fetch.
 - No background service worker exists.
 
 The only browser warning you will see is that the extension can "read and
