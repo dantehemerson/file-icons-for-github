@@ -1,28 +1,31 @@
-/* ── Configurable icon size ── */
-.seti-icon {
-  --seti-icon-size: 20px;
-}
-
 /* Vertically align icon with filename inside the text slot. */
 .PRIVATE_TreeView-item-content-text:has(> .seti-icon) {
   display: inline-flex !important;
   align-items: center;
 }
 
-/* Base icon element injected before file names. */
+/* Base icon element injected before file names.
+ * The Seti font glyphs have significant internal side bearings (padding)
+ * in the em-square, so scaling the glyph is required to make it visually
+ * fill the full 14px box that matches GitHub's native folder icon. The
+ * scale transform does not affect layout, and overflow: hidden clips any
+ * bleed so the icon stays a fixed 14px × 14px footprint with 2px margin. */
 .seti-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--seti-icon-size);
-  height: var(--seti-icon-size);
+  width: 14px;
+  height: 14px;
   flex: none;
+  overflow: hidden;
   font-family: 'Seti' !important;
-  font-size: var(--seti-icon-size) !important;
+  font-size: 14px !important;
   font-style: normal;
   font-weight: normal;
-  line-height: 1;
+  line-height: 14px;
   text-align: center;
+  transform: scale(1.6);
+  transform-origin: center center;
   margin-right: 2px;
   -webkit-font-smoothing: antialiased;
   user-select: none;
