@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/icon-128.png" alt="File Icons for GitHub" width="96" />
+</p>
+
 <h1 align="center">File Icons for GitHub</h1>
 
 <p align="center">
