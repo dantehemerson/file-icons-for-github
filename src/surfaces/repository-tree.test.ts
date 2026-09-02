@@ -67,6 +67,39 @@ function treeFileItemWithWrapper(name: string): HTMLElement {
   return outer;
 }
 
+function treeLoadingItem(): HTMLElement {
+  const item = document.createElement('li');
+  item.className = 'PRIVATE_TreeView-item';
+  item.setAttribute('data-loading', 'true');
+  item.innerHTML = `
+    <div class="PRIVATE_TreeView-item-content">
+      <div class="PRIVATE_TreeView-item-visual">
+        <span data-component="Spinner">
+          <svg></svg>
+        </span>
+      </div>
+      <div class="PRIVATE_TreeView-item-content-text"><span>Loading...</span></div>
+    </div>`;
+  document.body.append(item);
+  return item;
+}
+
+function treeLoadingItemWithoutSemanticAttribute(): HTMLElement {
+  const item = document.createElement('li');
+  item.className = 'PRIVATE_TreeView-item';
+  item.innerHTML = `
+    <div class="PRIVATE_TreeView-item-content">
+      <div class="PRIVATE_TreeView-item-visual">
+        <span data-component="Spinner">
+          <svg></svg>
+        </span>
+      </div>
+      <div class="PRIVATE_TreeView-item-content-text"><span>Loading...</span></div>
+    </div>`;
+  document.body.append(item);
+  return item;
+}
+
 beforeEach(() => {
   document.body.innerHTML = '';
 });
@@ -151,5 +184,23 @@ describe('renderTreeItem', () => {
     renderTreeItem(item);
     expect(item.querySelector('.seti-icon')).toBeNull();
     expect(item.querySelector('.seti-original-icon')).toBeNull();
+  });
+
+  it('skips loading placeholders with data-loading', () => {
+    const item = treeLoadingItem();
+    renderTreeItem(item);
+
+    expect(item.querySelector('.seti-icon')).toBeNull();
+    expect(item.querySelector('.seti-original-icon')).toBeNull();
+    expect(item.querySelector('[data-component="Spinner"] svg')).not.toBeNull();
+  });
+
+  it('skips loading placeholders by Spinner fallback when data-loading is missing', () => {
+    const item = treeLoadingItemWithoutSemanticAttribute();
+    renderTreeItem(item);
+
+    expect(item.querySelector('.seti-icon')).toBeNull();
+    expect(item.querySelector('.seti-original-icon')).toBeNull();
+    expect(item.querySelector('[data-component="Spinner"] svg')).not.toBeNull();
   });
 });

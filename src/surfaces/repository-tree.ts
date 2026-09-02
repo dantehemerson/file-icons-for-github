@@ -17,6 +17,15 @@ export function renderTreeItem(item: Element): void {
     return;
   }
 
+  // Primer renders temporary loading rows while expanding folders. They should
+  // keep GitHub's native spinner instead of being decorated with a file icon.
+  if (
+    item.hasAttribute('data-loading')
+    || content.querySelector('[data-component="Spinner"]')
+  ) {
+    return;
+  }
+
   // Directories expose aria-expanded and a folder/chevron icon in their visual slot.
   if (item.hasAttribute('aria-expanded') || content.hasAttribute('aria-expanded')) {
     return;
