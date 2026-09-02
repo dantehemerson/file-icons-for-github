@@ -43,4 +43,19 @@ describe('renderDiffHeader', () => {
     renderDiffHeader(header);
     expect(header.querySelector('.seti-icon')).toBeNull();
   });
+
+  it('strips LRM/RLM and other bidi marks from the file name', () => {
+    const header = document.createElement('div');
+    header.className = 'DiffFileHeader-module__diff-file-header__UuNN4';
+    header.innerHTML = `<div class="d-flex">
+      <h3 class="DiffFileHeader-module__file-name__VVXpg"><code>&lrm;src/R.hpp&lrm;</code></h3>
+    </div>`;
+    document.body.append(header);
+
+    renderDiffHeader(header);
+
+    const icon = header.querySelector<HTMLElement>('h3 .seti-icon');
+    expect(icon).not.toBeNull();
+    expect(icon!.textContent).toBe(defs[resolveIcon('R.hpp', 'file')!]!.c);
+  });
 });
