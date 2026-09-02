@@ -19,15 +19,7 @@
 
 /* Repository file table: hide GitHub's generic file octicon in cells we
  * decorated. Directories keep their folder icon. */
-div.react-directory-filename-column:has(.seti-icon) svg.octicon-file {
-  display: none;
-}
-
-/* Repository file tree / file finder: hide the generic file octicon in the
- * TreeView visual slot of decorated (file) items.  The :has() selector is
- * scoped to the item's own content-text so that folder <li> elements (which
- * contain descendant file icons when expanded) are not matched. */
-li.PRIVATE_TreeView-item:has(> .PRIVATE_TreeView-item-content > .PRIVATE_TreeView-item-content-text > .seti-icon) .PRIVATE_TreeView-item-visual svg {
+.seti-original-icon {
   display: none;
 }
 

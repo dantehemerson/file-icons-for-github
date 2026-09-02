@@ -2,7 +2,7 @@ import { observe } from '../observe';
 import { createIcon, getIcon } from '../render';
 import { resolveIcon } from '../icons/resolve-icon';
 
-const SELECTOR = 'li.PRIVATE_TreeView-item';
+const SELECTOR = '.PRIVATE_TreeView-item';
 
 /**
  * Repository file tree (blob/tree sidebar), the "Go to file" finder, and the
@@ -17,16 +17,20 @@ export function renderTreeItem(item: Element): void {
     return;
   }
 
-  // Directories expose aria-expanded and a chevron in their visual slot.
-  if (content.hasAttribute('aria-expanded')) {
+  // Directories expose aria-expanded and a folder/chevron icon in their visual slot.
+  if (item.hasAttribute('aria-expanded') || content.hasAttribute('aria-expanded')) {
     return;
   }
   const visual = item.querySelector<SVGElement>('.PRIVATE_TreeView-item-visual svg');
-  const chevron = visual?.classList.contains('octicon-chevron-down')
-    || visual?.classList.contains('octicon-chevron-right')
-    || visual?.classList.contains('octicon-chevron-up');
-  if (chevron) {
-    return;
+  if (visual) {
+    const isChevron = visual.classList.contains('octicon-chevron-down')
+      || visual.classList.contains('octicon-chevron-right')
+      || visual.classList.contains('octicon-chevron-up');
+    const isDirectory = visual.classList.contains('octicon-file-directory-fill')
+      || visual.classList.contains('octicon-file-directory');
+    if (isChevron || isDirectory) {
+      return;
+    }
   }
 
   const textSlot = content.querySelector<HTMLElement>('.PRIVATE_TreeView-item-content-text');
@@ -46,6 +50,10 @@ export function renderTreeItem(item: Element): void {
   }
 
   textSlot.prepend(createIcon(info));
+
+  if (visual instanceof SVGElement) {
+    visual.classList.add('seti-original-icon');
+  }
 }
 
 export function initRepositoryTree(): void {

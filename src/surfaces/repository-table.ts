@@ -40,6 +40,11 @@ export function renderRepositoryColumn(column: Element): void {
   } else {
     column.prepend(icon);
   }
+
+  const originalIcon = column.querySelector<SVGElement>('svg.octicon-file');
+  if (originalIcon instanceof SVGElement) {
+    originalIcon.classList.add('seti-original-icon');
+  }
 }
 
 export function initRepositoryTable(): void {

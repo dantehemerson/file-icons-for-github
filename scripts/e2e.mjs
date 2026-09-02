@@ -34,6 +34,10 @@ function check(name, ok, detail = '') {
   console.log(`${ok ? 'PASS' : 'FAIL'}  ${name}${detail ? `  [${detail}]` : ''}`);
 }
 
+function fail(name, detail = '') {
+  check(name, false, detail);
+}
+
 async function dumpDom(label, selector, max = 2) {
   if (!dump) {
     return;
@@ -96,11 +100,15 @@ try {
     .locator('[data-testid="repos-file-tree-container"] li.PRIVATE_TreeView-item:not([aria-expanded])')
     .count();
   const treeIcons = await page.locator('[data-testid="repos-file-tree-container"] .seti-icon').count();
-  check('sidebar tree: every file decorated', treeIcons >= fileItems, `icons=${treeIcons} files=${fileItems}`);
-  const octiconHidden = await page
-    .locator('[data-testid="repos-file-tree-container"] li.PRIVATE_TreeView-item:not([aria-expanded]) svg.octicon-file')
-    .evaluateAll((els) => els.every((el) => getComputedStyle(el).display === 'none'));
-  check('sidebar tree: generic file octicon hidden', octiconHidden);
+  if (fileItems === 0) {
+    fail('sidebar tree: no file items found', 'selector mismatch');
+  } else {
+    check('sidebar tree: every file decorated', treeIcons >= fileItems, `icons=${treeIcons} files=${fileItems}`);
+  }
+  const originalIconsHidden = await page
+    .locator('[data-testid="repos-file-tree-container"] .seti-original-icon')
+    .evaluateAll((els) => els.length === 0 || els.every((el) => getComputedStyle(el).display === 'none'));
+  check('sidebar tree: original file icons hidden', originalIconsHidden);
   const folderVisualVisible = await page
     .locator('[data-testid="repos-file-tree-container"] li.PRIVATE_TreeView-item[aria-expanded] .PRIVATE_TreeView-item-visual')
     .evaluateAll((els) => els.every((el) => getComputedStyle(el).display !== 'none'));
@@ -115,7 +123,11 @@ try {
   await page.waitForSelector('.PRIVATE_TreeView-item .seti-icon', { state: 'attached', timeout: 10_000 });
   const finderItems = await page.locator('.PRIVATE_TreeView-item:not([aria-expanded])').count();
   const finderIcons = await page.locator('.PRIVATE_TreeView-item .seti-icon').count();
-  check('file finder: results decorated', finderIcons >= finderItems, `icons=${finderIcons} files=${finderItems}`);
+  if (finderItems === 0) {
+    fail('file finder: no items found', 'selector mismatch');
+  } else {
+    check('file finder: results decorated', finderIcons >= finderItems, `icons=${finderIcons} files=${finderItems}`);
+  }
   await dumpDom('file finder item', '.PRIVATE_TreeView-item-content', 1);
 
 // 5. Code search results (requires a signed-in session; skipped otherwise)

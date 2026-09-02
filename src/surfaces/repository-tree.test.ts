@@ -25,6 +25,48 @@ function treeDirectoryItem(name: string, expanded = false): HTMLElement {
   return item;
 }
 
+function treeDirectoryItemWithItemAria(name: string, expanded = false): HTMLElement {
+  const item = document.createElement('li');
+  item.className = 'PRIVATE_TreeView-item';
+  if (expanded) {
+    item.setAttribute('aria-expanded', 'false');
+  }
+  item.innerHTML = `
+    <div class="PRIVATE_TreeView-item-content">
+      <div class="PRIVATE_TreeView-item-visual"><svg class="octicon octicon-file-directory-fill"></svg></div>
+      <div class="PRIVATE_TreeView-item-content-text"><span class="PRIVATE_TreeView-item-name">${name}</span></div>
+    </div>`;
+  document.body.append(item);
+  return item;
+}
+
+function treeDirectoryItemWithDirSvg(name: string): HTMLElement {
+  const item = document.createElement('li');
+  item.className = 'PRIVATE_TreeView-item';
+  item.innerHTML = `
+    <div class="PRIVATE_TreeView-item-content">
+      <div class="PRIVATE_TreeView-item-visual"><svg class="octicon octicon-file-directory-fill"></svg></div>
+      <div class="PRIVATE_TreeView-item-content-text"><span class="PRIVATE_TreeView-item-name">${name}</span></div>
+    </div>`;
+  document.body.append(item);
+  return item;
+}
+
+function treeFileItemWithWrapper(name: string): HTMLElement {
+  const outer = document.createElement('div');
+  outer.className = 'PRIVATE_TreeView-item';
+  const item = document.createElement('li');
+  item.className = 'PRIVATE_TreeView-item';
+  item.innerHTML = `
+    <div class="PRIVATE_TreeView-item-content">
+      <div class="PRIVATE_TreeView-item-visual"><svg class="octicon octicon-file"></svg></div>
+      <div class="PRIVATE_TreeView-item-content-text"><span class="PRIVATE_TreeView-item-name">${name}</span></div>
+    </div>`;
+  outer.append(item);
+  document.body.append(outer);
+  return outer;
+}
+
 beforeEach(() => {
   document.body.innerHTML = '';
 });
@@ -64,5 +106,50 @@ describe('renderTreeItem', () => {
 
     expect(child.querySelector('.seti-icon')).not.toBeNull();
     expect(folder.querySelector('.PRIVATE_TreeView-item-content-text')!.querySelector('.seti-icon')).toBeNull();
+  });
+
+  it('marks the original SVG with seti-original-icon', () => {
+    const item = treeFileItem('index.ts');
+    renderTreeItem(item);
+
+    const originalIcon = item.querySelector<SVGElement>('.PRIVATE_TreeView-item-visual svg');
+    expect(originalIcon).not.toBeNull();
+    expect(originalIcon!.classList.contains('seti-original-icon')).toBe(true);
+  });
+
+  it('works with non-li wrapper elements (repos-file-tree)', () => {
+    const item = treeFileItemWithWrapper('utils.ts');
+    renderTreeItem(item);
+
+    const textSlot = item.querySelector('.PRIVATE_TreeView-item-content-text')!;
+    const icon = textSlot.querySelector<HTMLElement>('.seti-icon');
+    expect(icon).not.toBeNull();
+
+    const originalIcon = item.querySelector<SVGElement>('.PRIVATE_TreeView-item-visual svg');
+    expect(originalIcon!.classList.contains('seti-original-icon')).toBe(true);
+  });
+
+  it('does not mark original SVG for directories', () => {
+    const item = treeDirectoryItem('src');
+    renderTreeItem(item);
+
+    const visuals = item.querySelectorAll<SVGElement>('.PRIVATE_TreeView-item-visual svg, .PRIVATE_TreeView-item-toggle svg');
+    for (const visual of visuals) {
+      expect(visual.classList.contains('seti-original-icon')).toBe(false);
+    }
+  });
+
+  it('skips directories with aria-expanded on the item element', () => {
+    const item = treeDirectoryItemWithItemAria('src', true);
+    renderTreeItem(item);
+    expect(item.querySelector('.seti-icon')).toBeNull();
+    expect(item.querySelector('.seti-original-icon')).toBeNull();
+  });
+
+  it('skips items with directory SVG class', () => {
+    const item = treeDirectoryItemWithDirSvg('utils');
+    renderTreeItem(item);
+    expect(item.querySelector('.seti-icon')).toBeNull();
+    expect(item.querySelector('.seti-original-icon')).toBeNull();
   });
 });
