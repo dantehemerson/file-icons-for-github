@@ -8,10 +8,6 @@
   Bring the iconic VS Code <strong>Seti</strong> file icons to every GitHub page you use.
 </p>
 
-<p align="center">
-  <em>Pretty pixels, zero network traffic, zero tracking.</em>
-</p>
-
 <br/>
 
 <p align="center">
@@ -24,11 +20,8 @@
 - 🔒 **Private by design** — runs entirely in your browser; nothing is collected, stored, or transmitted.
 - 🛡️ **No permissions, no network** — zero `host_permissions`, no background service worker, no remote code.
 - ⚡ **Lightweight & fast** — a single ~37 KB icon font embedded in the extension, no per-file image requests.
-- 🎨 **True to VS Code** — the exact Seti icon set you already know from the editor, including theme-aware colors.
 - 🧭 **Covers GitHub everywhere** — file listings, sidebar tree, file finder, code search, gists, and PR / commit diffs.
 - 🌓 **Light & dark themes** — icons automatically recolor to match GitHub's light and dark modes.
-- ♿ **Accessibility-friendly** — every icon is decorative (`aria-hidden`) and never alters the underlying file link or its accessible name.
-- 🧱 **Manifest V3, modern build** — clean-room successor to `dderevjanik/github-vscode-icons` on top of [WXT](https://wxt.dev) + [Vite](https://vitejs.dev).
 
 ## 📦 Install
 
@@ -118,7 +111,6 @@ Bug reports and pull requests are welcome. For non-trivial changes, please open 
 
 - Icons and associations: [Seti UI](https://github.com/jesseweed/seti-ui) by Jesse Weed, distributed via Microsoft's [vscode-theme-seti](https://github.com/microsoft/vscode/tree/main/extensions/theme-seti) (MIT / Seti UI license). Third-party notices live in [`assets/third-party/`](assets/third-party/).
 - Build tooling: [WXT](https://wxt.dev), [Vite](https://vitejs.dev), [Vitest](https://vitest.dev), [Playwright](https://playwright.dev).
-- Inspired by the now-abandoned [`dderevjanik/github-vscode-icons`](https://github.com/dderevjanik/github-vscode-icons).
 
 ## 📄 License
 
